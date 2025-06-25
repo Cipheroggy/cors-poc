@@ -23,24 +23,25 @@
     <pre id="dump">loading…</pre>
 
     <script>
+const viewer = document.getElementById('viewer');
+const dump   = document.getElementById('dump');
+
 fetch('https://cms.bumba.global/admin/auth/login', { credentials: 'include' })
   .then(r => r.text())
   .then(html => {
-    /* 1️⃣  Add a <base> so relative URLs point at the real site */
     html = html.replace(
       /<head>/i,
       '<head><base href="https://cms.bumba.global/">'
     );
 
-    /* 2️⃣  Show styled page in iframe */
     viewer.srcdoc = html;
-
-    /* 3️⃣  Also dump first 2 KB for header proof */
     dump.textContent = html.slice(0, 2000) +
       (html.length > 2000 ? '\n…(truncated)…' : '');
   })
-  .catch(err => dump.textContent = 'Error: ' + err);
-</script>
-
-  </body>
+  .catch(err => {
+    console.error(err);
+    dump.textContent = 'Fetch failed: ' + err;
+  });
+  </script>
+ </body>
 </html>

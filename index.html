@@ -23,21 +23,24 @@
     <pre id="dump">loading…</pre>
 
     <script>
-      // 1. Cross‑origin request with credentials
-      fetch('https://cms.bumba.global/admin/auth/login', {
-        credentials: 'include'
-      })
-      .then(res => res.text())
-      .then(html => {
-        // 2. Show the HTML inside an iframe so it renders
-        document.getElementById('viewer').srcdoc = html;
-        // 3. Also dump raw HTML so headers/body are easy to verify
-        document.getElementById('dump').textContent = html.slice(0, 2000) + 
-          (html.length > 2000 ? '\n…(truncated)…' : '');
-      })
-      .catch(err => {
-        document.getElementById('dump').textContent = 'Error: ' + err;
-      });
-    </script>
+fetch('https://cms.bumba.global/admin/auth/login', { credentials: 'include' })
+  .then(r => r.text())
+  .then(html => {
+    /* 1️⃣  Add a <base> so relative URLs point at the real site */
+    html = html.replace(
+      /<head>/i,
+      '<head><base href="https://cms.bumba.global/">'
+    );
+
+    /* 2️⃣  Show styled page in iframe */
+    viewer.srcdoc = html;
+
+    /* 3️⃣  Also dump first 2 KB for header proof */
+    dump.textContent = html.slice(0, 2000) +
+      (html.length > 2000 ? '\n…(truncated)…' : '');
+  })
+  .catch(err => dump.textContent = 'Error: ' + err);
+</script>
+
   </body>
 </html>

